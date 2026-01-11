@@ -1,0 +1,20 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Display project structure
+        run: ls -la
+
+      - name: Run basic checks
+        run: echo "Backend workflow is running successfully on push to main branch"
