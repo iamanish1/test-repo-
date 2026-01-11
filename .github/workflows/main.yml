@@ -37,5 +37,23 @@ jobs:
       - name: Build backend
         run: npm run build --if-present || echo "No build script configured"
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          tags: test-repo:latest
+          file: ./Dockerfile
+          outputs: type=docker,dest=/tmp/image.tar
+
+      - name: Load Docker image
+        run: docker load --input /tmp/image.tar
+
+      - name: Inspect Docker image
+        run: docker images | grep test-repo
+
       - name: Workflow completion
-        run: echo "✓ CI workflow completed successfully on push to main branch"
+        run: echo "✓ CI workflow with Docker build completed successfully on push to main branch"
